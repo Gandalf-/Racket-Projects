@@ -25,7 +25,6 @@
             (out '() ))
       (if (empty? in)
           (reverse out)
-          
           (l (cddr in)
              (cons (list->string (take in n))
                    out)))))
