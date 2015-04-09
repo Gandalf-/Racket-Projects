@@ -51,18 +51,16 @@
 
   ;Add padding
   (define (add-pad in)
-    (append (build-list (- padding (length in)) 
-                        (lambda (x) 0))
-            in))
+    (append 
+      (build-list (- padding (length in)) 
+                  (lambda (x) 0))
+      in))
 
   ;Turn a list of binary numbers into a string
   (define (numlist->string in)
     (list->string 
       (map
-        (lambda (x)
-          (if (= x 1)
-            #\1
-            #\0))
+        (lambda (x) (if (= x 1) #\1 #\0))
         (add-pad (reverse in)))))
 
   ;Check each power of two for a corresponding value in the places list
