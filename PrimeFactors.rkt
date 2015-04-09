@@ -1,18 +1,5 @@
 #lang racket
 
-(define input "Hello there. What's going on? Congratulations on decoding this!")
-
-(define (string->decimal input)
-  (let loop ((in (string->list input))
-             (out ""))
-    (if (empty? in)
-        out
-        (loop (cdr in)
-              (string-append out (number->string (char->integer (car in)))))
-        )))
-
-;(string->decimal input)
-
 (define (prime-factors x)
   (let loop ((factors '(1) )
              (d 2)

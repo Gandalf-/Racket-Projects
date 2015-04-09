@@ -15,6 +15,3 @@
         (loop (+ 1 i) (* num (- x i))))))
 
 (factorial-falling 5)
-
-
-  

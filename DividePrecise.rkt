@@ -1,23 +1,7 @@
 #lang racket
 
-(require "readword.rkt" )
-
 (provide divide_precise)
 
-;WHOLE AND REMAINDER
-;-------------------------------------------------------------
-(define (divide_remainder x y)
-  (define whole (floor (/ x y)))
-  (display "Whole: ")(display whole)
-  (newline)
-  (display "Remainder: ")(display (- x (* whole y)))
-  (newline)
-  (newline))
-
-;(divide_remainder 21 4)
-
-;PRECISION
-;-------------------------------------------------------------
 ;Define the results list and precision (number of decimals)
 (define result '() )
 (define precision 100)
@@ -48,21 +32,4 @@
   (divide_precise_slave x y 0)
   (print_result result 0))
 
-;(divide_precise 9 7)
-
-;Get number from file
-(define (get-number input-file)
-  (call-with-input-file input-file
-    (lambda (file)
-      (read-word file))))
-
-;Divide two numbers in seperate files
-(define (divide_from_file x y)
-  (divide_precise (string->number (get-number x)) (string->number (get-number y))))
-  
-;(divide_from_file "Fibonacci/Data/two-thousand.txt"
-;                  "Fibonacci/Data/two-thousand-minus.txt")
-
-;(divide_precise 22 5)
-
- 
+(divide_precise 9 7)

@@ -1,15 +1,5 @@
 #lang racket
 
-; CS 301
-; Winter 2014
-; Lab 3
-;
-; Austin Voecks
-; W01007542
-;
-; This program finds perfect numbers within a given range
-
-
 ;Returns the sum of all the values in a list
 (define (sum-list x)
   (if (null? x)
@@ -67,10 +57,3 @@
   (loop binary-list))
 
 (binary-to-decimal 1111111111111111111111111111111111000000000000000000000000000000000)
-
-
-
-
-
-
-
