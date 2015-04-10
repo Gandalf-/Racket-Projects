@@ -1,35 +1,29 @@
 #lang racket
 
-(provide divide_precise)
-
-;Define the results list and precision (number of decimals)
-(define result '() )
-(define precision 100)
-
-;Prints the result list
-(define (print_result input counter)
-  (unless (empty? input)
-    (if (= 1 counter)
-        (begin
-          (display ".")
-          (print_result input (+ 1 counter)))
-        (begin
-          (display (car input))
-          (print_result (cdr input) (+ 1 counter))))))
-
-;Master for divide_precise_slave and print_results
-(define (divide_precise x y)
+; Divide (/ x y) with prec decimal places of accuracy
+(define (divide-precise x y precision)
   
-  ;Makes calculations and saves to results
-  (define (divide_precise_slave x y counter)
-    (unless (> counter precision)
-      (begin
-        (define whole (floor (/ x y)))
-        (define remainder (- x (* whole y)))
-        (set! result (append result (list whole)))
-        (divide_precise_slave (* 10 remainder) y (+ 1 counter)))))
+  (define (list-of-string->string x)
+    (foldl string-append "" x))
   
-  (divide_precise_slave x y 0)
-  (print_result result 0))
-
-(divide_precise 9 7)
+  (define (floor-integer x)
+    (cdr (member 
+          #\. (reverse 
+               (string->list 
+                (number->string x))))))
+  
+  (define (quot x y)
+    (list-of-string->string
+     (map string (floor-integer (/ x y)))))
+  
+  (define (remain x y)
+    (- x (* (string->number (quot x y)) y)))
+  
+  (let loop ((out '() ) (i 0) (x x))
+    (if (= i precision)
+        (list-of-string->string out)
+        (loop (if (= i 0)
+                  (cons "." (cons (quot x y) out))
+                  (cons (quot x y) out))
+              (+ i 1)
+              (* (remain x y) 10)))))
