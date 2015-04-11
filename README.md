@@ -5,7 +5,7 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 ## Polished
 - DividePrecise
 - Binary-Encrypt
-- Hex
+- Hex-Encrypt
 
 ## Rough  
 - Perfect
