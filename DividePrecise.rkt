@@ -1,5 +1,7 @@
 #lang racket
 
+(provide divide-precise)
+
 ; Divide (/ x y) with prec decimal places of accuracy
 (define (divide-precise x y precision)
   
@@ -7,14 +9,17 @@
     (foldl string-append "" x))
   
   (define (floor-integer x)
-    (cdr (member 
-          #\. (reverse 
-               (string->list 
-                (number->string x))))))
+    (if (integer? x)
+        (reverse (string->list (number->string x)))
+        (cdr (member 
+              #\. (reverse 
+                   (string->list 
+                    (number->string x)))))))
   
   (define (quot x y)
     (list-of-string->string
-     (map string (floor-integer (/ x y)))))
+     (map string
+          (floor-integer (exact->inexact (/ x y))))))
   
   (define (remain x y)
     (- x (* (string->number (quot x y)) y)))
@@ -27,3 +32,5 @@
                   (cons (quot x y) out))
               (+ i 1)
               (* (remain x y) 10)))))
+
+;(divide-precise 47293487295872394827349823 29384792384792384729384 25)

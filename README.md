@@ -6,6 +6,7 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - DividePrecise
 - Binary-Encrypt
 - Hex-Encrypt
+- Pi
 
 ## Rough  
 - Perfect
@@ -14,7 +15,8 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - PrimeFactors
 - Binary-Decimal
 - Xibonacci
-- Pi
+- Alpha
+- Waterfall-Encrypt
 
 ## Broken
 - Integration
