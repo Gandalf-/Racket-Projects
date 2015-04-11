@@ -8,27 +8,19 @@
 ;Takes the inverse of the list
 (define (inverse-list key-list)
   (map
-    (lambda (x)
-      (* -1 x))
+    (lambda (x) (* -1 x))
     key-list))
 
 ;Replace password->key-list
 (define (string->integer-list in)
   (map
-    (lambda (x)
-      (char->integer x))
+    (lambda (x) (char->integer x))
     (string->list in)))
 
 ;Takes a list of strings and appends them together
 (define (list-strings->string in)
-  (let loop ((out "")
-             (curr (reverse in)))
-    (if (empty? curr)
-      out
-      (loop (string-append (car curr) out)
-            (cdr curr)))
-    ))
-
+  (foldl string-append "" in))
+  
 ;Split the input list of characters into strings of len length
 (define (split-list input len)
   (let loop ((out '() )
@@ -43,8 +35,7 @@
       ;Add len elements to output
       (loop (cons (list->string (take curr len))
                   out)
-            (list-tail curr len))
-      )))
+            (list-tail curr len)) )))
 
 ;ENCRYPTION FUNCS
 ;====================================
@@ -63,9 +54,7 @@
             (if (< 0 (+ x y))
               (integer->char (+ x y))
               (integer->char (+ x 0))))
-          in (take k (length in)))
-        ))
-    ))
+          in (take k (length in))) )) ))
 
 ;Encrypts a list of characters broken into sublists
 (define (waterfall-encrypt input key)
@@ -80,8 +69,7 @@
       (loop (cons (cipher (car (cdr curr))
                           (string->integer-list (car curr)))
                   out)
-            (cdr curr))
-      )))
+            (cdr curr)) )))
 
 ;Decrypts a waterfall encrypted list of characters
 (define (waterfall-decrypt input key)
@@ -94,8 +82,7 @@
       (loop (cons (cipher (car (cdr curr))
                           (inverse-list (string->integer-list (car out))))
                   out)
-            (cdr curr))
-      )))
+            (cdr curr)) )))
 
 ;MAIN
 ;====================================
@@ -132,11 +119,8 @@
 
 (define (test)
   ;Encrypt and save
-  (define encrypted (waterfall message key #t))
-  (display encrypted)(newline)(newline)
-  ;Decrypt
-  (display (waterfall encrypted key #f))
-  )
+  (let ((encrypted (waterfall message key #t)))
+    (displayln encrypted)(newline)
+    (displayln (waterfall encrypted key #f))))
 
-(test)
-
+;(test)

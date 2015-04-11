@@ -7,8 +7,7 @@
 (define (f old new)
   (let ((alpha 0.10))
     (+ (* old alpha)
-       (* new (- 1 alpha)))
-    ))
+       (* new (- 1 alpha))) ))
 
 ; Generate a list of random stars
 ; "**********           "
@@ -69,16 +68,16 @@
 
 (vertical-print q)
 
-;;Print horizontally
-;(define d
-;  (map
-;   (λ (x)
-;     (let print-line ((y x)
-;                      (str ""))
-;       (if (empty? y)
-;           (print str)
-;           (print-line (cdr y)
-;                       (string-append (car y) str))))
-;     (newline)
-;     x)
-;   q))
+;Print horizontally
+(define d
+  (map
+   (λ (x)
+     (let print-line ((y x)
+                      (str ""))
+       (if (empty? y)
+           (print str)
+           (print-line (cdr y)
+                       (string-append (car y) str))))
+     (newline)
+     x)
+   q))
