@@ -11,8 +11,7 @@
     (if (> i x)
         (reverse output)
         (loop (cons (+ (car output) (cadr output)) output)
-              (+ i 1))
-        )))
+              (+ i 1)) )))
 
 ;(listonacci 25)
 
@@ -24,8 +23,7 @@
       (display curr) (newline)
       (loop (string-append curr prev)
             curr
-            (+ i 1))
-      )))
+            (+ i 1)) )))
 
 ;(fibo-word "A" "B" 10)
 
@@ -36,8 +34,7 @@
     (if (> i x)
         (reverse output)
         (loop (cons 0 output)
-              (+ i 1))
-        )))             
+              (+ i 1)) )))             
 
 ;Grabs returns the first x elements in a list
 (define (get-x x input-list)
@@ -48,8 +45,7 @@
         (reverse output)
         (loop (cons (car curr-list) output)
               (cdr curr-list)
-              (+ i 1))
-        )))
+              (+ i 1)) )))
 
 ;Sums all the contents of a list
 (define (sum-list input-list)
@@ -58,8 +54,7 @@
     (if (empty? curr-list)
         sum
         (loop (+ sum (car curr-list))
-              (cdr curr-list))
-        )))
+              (cdr curr-list)) )))
 
 ;(sum-list '(1 2 3 4 5 6 7))
 ;(get-x 4 '(1 2 3 4 5 6 7 8 9 0))
@@ -78,9 +73,7 @@
           (display (reverse output))
           (loop (cons (sum-list (get-x x output))
                       output)
-                (+ i 1))
-          ))))
+                (+ i 1)) ))))
 
 ;Fibonacci
 (xibonacci 3 25 '(1 1 1))
-
