@@ -51,14 +51,14 @@
 
   ;Add padding
   (define (add-pad in)
-    (append 
-      (build-list (- padding (length in)) 
+    (append
+      (build-list (- padding (length in))
                   (lambda (x) 0))
       in))
 
   ;Turn a list of binary numbers into a string
   (define (numlist->string in)
-    (list->string 
+    (list->string
       (map
         (lambda (x) (if (= x 1) #\1 #\0))
         (add-pad (reverse in)))))
@@ -69,7 +69,7 @@
                (input-list input)
                (output '() ))
 
-      (if (empty? input-list)       
+      (if (empty? input-list)
         (numlist->string output)
         (if (= (car input-list) current-place)
           (loop (* 2 current-place)
