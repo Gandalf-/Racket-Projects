@@ -1,5 +1,7 @@
 #lang racket
 
+(provide divide-precise)
+
 ; Divide (/ x y) with prec decimal places of accuracy
 (define (divide-precise x y precision)
   
@@ -14,7 +16,9 @@
   
   (define (quot x y)
     (list-of-string->string
-     (map string (floor-integer (/ x y)))))
+     (map string
+          (floor-integer
+           (exact->inexact (/ x y))))))
   
   (define (remain x y)
     (- x (* (string->number (quot x y)) y)))
@@ -27,3 +31,5 @@
                   (cons (quot x y) out))
               (+ i 1)
               (* (remain x y) 10)))))
+
+(divide-precise 4938492348925 8 250)

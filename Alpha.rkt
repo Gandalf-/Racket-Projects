@@ -71,7 +71,7 @@
 ;Print horizontally
 (define d
   (map
-   (λ (x)
+   (lambda (x)
      (let print-line ((y x)
                       (str ""))
        (if (empty? y)
