@@ -7,16 +7,20 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - Binary-Encrypt
 - Hex-Encrypt
 - Pi
+- Primes
 
 ## Rough  
 - Perfect
 - Factorials
 - Primes
-- PrimeFactors
+- FactorPrime
 - Binary-Decimal
 - Xibonacci
 - Alpha
 - Waterfall-Encrypt
+- FibonacciApprox
+- Wander (GUI)
+- Draw Tree (GUI)
 
 ## Broken
 - Integration
