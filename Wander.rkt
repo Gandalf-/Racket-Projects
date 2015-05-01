@@ -58,7 +58,7 @@
        (max-value 10)
        (init-value 4)
        (callback 
-         (lambda (b e)
+         (lambda (button event)
            ;Check for crash values
            (when (and (> num-segments 20)
                       (= (send speed-slider get-value) 1))
@@ -235,11 +235,11 @@
 (define animate
   (thread
     (lambda ()
-      (let loop ((i 0))
+      (let loop ()
         (send instructions move)
         (send canvas refresh)
         (sleep (/ (send speed-slider get-value)
                   50))
-        (loop (+ 1 i))))))
+        (loop)))))
 
 (thread-suspend animate)
