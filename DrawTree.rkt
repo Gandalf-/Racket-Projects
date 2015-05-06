@@ -7,8 +7,6 @@
 (define frame-width 600)
 (define frame-height 400)
 
-(define depth 25)
-
 ;Frame
 (define frame
   (new frame%
@@ -35,10 +33,12 @@
 ;Sliders
 ;-----------------------------------------------
 
-;Height Change
+;Definitions
 (define y-change-min 10)
 (define y-change-max 20)
+(define depth 25)
 
+;Height Change
 (define height-slider
   (new slider%
        (label "Height")
@@ -110,21 +110,18 @@
 
     (define (make-tree parent depth max-depth continue-chance)
 
-      ;Colors?
-      (if (send color-button get-value)
-        (begin
-          (send dc set-pen brown-pen)
-
-          ;Make the top 3/4 green
-          (when (>= depth (/ max-depth 4))
-            (send dc set-pen green-pen)))
-
-        (send dc set-pen black-pen))
-
       ;Done?
       (unless (= depth max-depth)
         ;Continue?
         (when (>= (/ continue-chance 100) (random))
+
+          ;Colors? (Green for top, brown for bottom, black is default)
+          (if (send color-button get-value)
+            (if (>= depth (/ max-depth 4))
+              (send dc set-pen green-pen)
+              (send dc set-pen brown-pen))
+
+            (send dc set-pen black-pen))
 
           ;Branches or stem?
           (if (>= (/ (send branch-slider get-value) 100) (random))
@@ -167,6 +164,7 @@
                           point%
                           ;No x change
                           (send parent get-x)
+
                           ;Random y change from slider
                           (- (send parent get-y)
                              (+ y-change-min 
@@ -179,6 +177,7 @@
               (make-tree stem (+ depth 1) max-depth (- continue-chance (send decay-slider get-value))))
             ))))
 
+    ;Begin the recursion
     (make-tree root 0 depth 100)))
 
 ;Canvas

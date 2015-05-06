@@ -11,16 +11,14 @@
 
 (define sqrt-five 2.236067977499789696409173668731276235440618359611525724270897245410520925637804899414414408378782274969508176150)
 
-;Prints x to a file
-;------------------------------------------------
+; Prints x to a file
 (define (print-this x name)
   (call-with-output-file name
     (lambda (output-port)
       (display x output-port))))
 
-;Approximating 'at'th fibonacci number above 2000
-; Print result to file
-;------------------------------------------------
+; Approximating 'at'th fibonacci number above 2000
+; print result to file
 (define (fibonacci-approx-file at file-name)
   (print-this (* thousandth (- at 1001))
               file-name) )
@@ -28,9 +26,8 @@
 ;(fibonacci-approx-file 1000000 "Data/million-approx.txt")
 
 
-;Approximating 'at'th fibonacci number above 2000
+; Approximating 'at'th fibonacci number above 2000
 ; but less than million. 
-;------------------------------------------------
 (define (fibonacci-approx at)
   (displayln 
     (inexact->exact
@@ -41,7 +38,6 @@
 
 
 ;Using the phi, sqrt 5 formula LIMIT < 10k
-;------------------------------------------------
 (define (fibonacci-formula n)
   (displayln
     (inexact->exact 

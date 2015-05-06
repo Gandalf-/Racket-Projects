@@ -2,6 +2,7 @@
 
 (provide primes)
 
+; Returns all a list of all prime numbers less than 'limit'
 (define (primes limit)
   (let loop ((in (cddr
                    (build-list limit values)))
@@ -17,4 +18,4 @@
             (cons (car in)
                   out))) ))
 
-(primes 1000000)
+(primes 10000000)
