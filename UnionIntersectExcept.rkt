@@ -22,16 +22,19 @@
            (empty? y))
        (reverse out))
 
+      ; In both lists
       ((= (car x) (car y))
        (loop (remove* (list (car x)) x)
              (remove* (list (car y)) y)
              (cons (car x) out)))
 
+      ; Only in x
       ((< (car x) (car y))
        (loop (cdr x)
              y
              out))
 
+      ; Only in y
       ((> (car x) (car y))
        (loop x
              (cdr y)
@@ -46,6 +49,7 @@
     (if (or (empty? x)
             (empty? y))
         (sort out <)
+
         (loop (remove* (list (car x)) x)
               y
               (if (boolean? (member (car x) y))

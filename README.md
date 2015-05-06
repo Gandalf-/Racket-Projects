@@ -21,6 +21,9 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - FibonacciApprox
 - Wander (GUI)
 - Draw Tree (GUI)
+- Basics.rkt
+- GraphMe (GUI)
+- UnionIntersectExcept
 
 ## Broken
 - Integration

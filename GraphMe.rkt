@@ -1,8 +1,7 @@
 #lang racket
 
 (require racket/gui)
-(require "readword.rkt")
-(require "Sorts/BubbleSort.rkt")
+;(require "readword.rkt")
 
 ;DATA HANDLING
 ;---------------------------------------------
@@ -24,18 +23,17 @@
 ;(set! points '(9 8 7 6 5 4 3 2 1 9 8 7 6 5 4 3 2 1 9 8 7 6 5 4 3 2 1 ))
 ;(set! points '(0 1 2 3 4 3 2 1 0 -1 -2 -3 -4 -3 -2 -1 0 1 2 3 4))
 
+; Requires readword.rkt
 ;(graph-from-file "Primes/Differences.txt")
-
 
 ;GUI INIT
 ;---------------------------------------------
 ;Frame
-(define frame (new frame%
-                   (label "Graph Me! 1.1")
-                   (min-width 750)
-                   (min-height 550)
-                   )
-  )
+(define frame 
+  (new frame%
+       (label "Graph Me! 1.2")
+       (min-width 750)
+       (min-height 550)))
 
 (send frame create-status-line)
 (send frame show #t)
@@ -46,9 +44,7 @@
        (parent frame)
        (stretchable-height #f)
        (style '(border))
-       (border 2)
-       )
-  )
+       (border 2)))
 
 ;Choices bar
 (define drawing-choice
@@ -56,143 +52,133 @@
        (parent h-panel)
        (label "Graph using: ")
        (choices '("Dots" "Lines"))
-       (callback (lambda (c e) (send canvas refresh)))
-       )
-  )
+       (callback 
+         (lambda (c e)
+           (send canvas refresh)))))
 
 (define graph-choice
   (new choice%
        (parent h-panel)
        (label "Type of graph: ")
        (choices '("Y values" "X,Y values"))
-       (callback (lambda (c e) (send canvas refresh)))
-       )
-  )
+       (callback 
+         (lambda (c e)
+           (send canvas refresh)))))
 
 ;Determine largest element of points
 (define (find-max input-list)
-  
-  (define (find-max-slave input-list largest)
-    (if (empty? input-list)
-        largest
-        (begin
-          (when (> (car input-list) largest)
-            (set! largest (car input-list))
-            )
-          (find-max-slave (cdr input-list) largest))))
-  
-  (find-max-slave input-list 0))
+  (car
+    (sort input-list >)))
 
 (define y-largest (find-max points))
 (define x-largest (length points))
 
 ;Draw graph
+; Draw y coordinate scale
+; Draw x coordinate scale
+; Plot using lines or dots
 (define my-draw
   (lambda (canvas dc)
-    
-    (define origin-offset 40)
-    
-    ;Draws y coordinate scale
-    (define (draw-y)
-      (let loop ((i 0))
-        (unless (> i 10)
-          (let ((y-value (number->string
-                          (exact->inexact (* y-largest (/ i 10)))) ))
-            (send dc draw-text
-                  y-value
-                  ;x
-                  0
-                  ;y
-                  (- (send canvas get-height)
-                     (* i (/ (send canvas get-height) 10))
-                     origin-offset))
-            )
-          (loop (+ i 1)))
-        ))
-    
-    ;Draws x coordinate scale
-    (define (draw-x)
-      (let loop ((i 10))
-        (unless (< i 0)
-          ;Value to be printed
-          (let ((x-value (number->string
-                          (exact->inexact (- x-largest
-                                             (* x-largest (/ i 10))))))) 
-            (send dc draw-text
-                  x-value
-                  ;x
-                  (- (send canvas get-width)
-                     (* i (/ (send canvas get-width) 10))
-                     origin-offset)
-                  ;y
-                  (- (send canvas get-height) 20))
-            )
-          (loop (- i 1)))
-        ))
-    
-    ;Begin drawing graph
-    (let loop ((i 0) (current points) (previous 0))
-      (unless (= i (length points))
-        (case (send drawing-choice get-selection)
-          ((0) ; Dots, plotting y values
-           (send dc draw-ellipse
-                 ;x
-                 (+ origin-offset
-                    (* i 
-                       (/ (send canvas get-width)
-                          (length points))))
-                 ;y
-                 (- (- (send canvas get-height)
-                       (* (- (send canvas get-height)
-                             origin-offset)
-                          (/ (car current) y-largest)))
-                    origin-offset)
-                 5 5
-                 ))
-          ((1) ; Lines, plotting y values
-           (send dc draw-lines
-                 (list
-                  (make-object point%
-                    ;x
-                    (+ origin-offset 
-                       (* i (/ (send canvas get-width)
-                               (length points))))
-                    ;y
-                    (- (- (send canvas get-height)
-                          (* (- (send canvas get-height)
-                                origin-offset)
-                             (/ (car current) y-largest)))
-                       origin-offset))
-                  (make-object point%
-                    ;x
-                    (+ origin-offset (* (- i 1) (/ (send canvas get-width)
-                                                   (length points))))
-                    ;y
-                    (- (- (send canvas get-height)
-                          (* (- (send canvas get-height)
-                                origin-offset)
-                             (/ previous y-largest)))
-                       origin-offset))
-                  )
-                 )
-           (set! previous (car current)))
-          )
-        (loop (+ i 1) (cdr current) previous)
-        )
-      )
-    (draw-y)
-    (draw-x)
-    ) 
-  )
+    (let ((origin-offset 40))
 
+      ;Draws y coordinate scale
+      (define (draw-y)
+        (let loop ((i 0))
+          (unless (> i 10)
+            (let ((y-value (number->string
+                             (exact->inexact 
+                               (* y-largest
+                                  (/ i 10)))) ))
+              (send dc draw-text
+                    y-value
+                    ;x
+                    0
+                    ;y
+                    (- (send canvas get-height)
+                       (* i 
+                          (/ (send canvas get-height) 10))
+                       origin-offset)))
+            (loop (+ i 1)))))
+
+      ;Draws x coordinate scale
+      (define (draw-x)
+        (let loop ((i 10))
+          (unless (< i 0)
+            ;Value to be printed
+            (let ((x-value (number->string
+                             (exact->inexact 
+                               (- x-largest
+                                  (* x-largest (/ i 10))))))) 
+              (send dc draw-text
+                    x-value
+                    ;x
+                    (- (send canvas get-width)
+                       (* i 
+                          (/ (send canvas get-width) 10))
+                       origin-offset)
+                    ;y
+                    (- (send canvas get-height) 20)))
+            (loop (- i 1)))
+          ))
+
+      ;Begin drawing graph
+      (let loop ((i 0)
+                 (current points)
+                 (previous 0))
+        (unless (= i (length points))
+          (case (send drawing-choice get-selection)
+            ((0)
+             ; Draw using dots, plotting y values
+             (send dc draw-ellipse
+                   ;x
+                   (+ origin-offset
+                      (* i 
+                         (/ (send canvas get-width)
+                            (length points))))
+                   ;y
+                   (- (- (send canvas get-height)
+                         (* (- (send canvas get-height)
+                               origin-offset)
+                            (/ (car current) y-largest)))
+                      origin-offset)
+                   5 5
+                   ))
+
+            ((1) ; Draw using lines, plotting y values
+             (send dc draw-lines
+                   (list
+                     (make-object point%
+                                  ;x
+                                  (+ origin-offset 
+                                     (* i (/ (send canvas get-width)
+                                             (length points))))
+                                  ;y
+                                  (- (- (send canvas get-height)
+                                        (* (- (send canvas get-height)
+                                              origin-offset)
+                                           (/ (car current) y-largest)))
+                                     origin-offset))
+
+                     (make-object point%
+                                  ;x
+                                  (+ origin-offset (* (- i 1) 
+                                                      (/ (send canvas get-width)
+                                                         (length points))))
+                                  ;y
+                                  (- (- (send canvas get-height)
+                                        (* (- (send canvas get-height)
+                                              origin-offset)
+                                           (/ previous y-largest)))
+                                     origin-offset))))
+             (set! previous (car current))))
+          (loop (+ i 1) (cdr current) previous)))
+
+      (draw-y)
+      (draw-x))) )
 
 (define canvas
   (new canvas%
        (parent frame)
        (min-width 300)
        (min-height 300)
-       (paint-callback my-draw)
-       )
-  )
-
-
+       (paint-callback my-draw)))
