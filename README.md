@@ -42,34 +42,45 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 
 - FactorPrime
   * Finds the prime factors of integers
+  * define, let, when, if, flatten, cons, modulo
 
 - Factorials
   * Basic calculation of factorials
+  * define, let, if
 
 - FibonacciApprox
   * Calculates the n'th Fibonacci number with various approximations
+  * require, define, call-with-output-file, lambda, display, inexact->exact, expt, if, or
 
 - GraphMe (GUI)
   * Graphically plots lists of integers or points
+  * require, define, call-with-output-file, lambda, let, when, set!, append, list, string->number, frame%, horizontal-panel%, choice%, car, sort, unless, send, point%, canvas%
 
 - Perfect
   * Calculates perfect numbers
+  * define, if, null?, car, cdr, modulo, let, append, list, filter, values, string->number, number->string, expt, char->integer, length
 
 - UnionIntersectExcept
   * Examples of set operations without using high level operations
+  * define, let, if, empty? sort, remove, list, cons, car, cond, or, reverse
  
 - Wander (GUI)
   * Graphical worm of arbitrary speed and length wanders randomly around the screen
+  * require, define, frame%, horizontal-panel%, slider%, lambda, set!, when, and, send, unless, append, list, object%, cos, sin, random, equal?, car, modulo, round, cdr, reverse, thread, check-box%, if, sleep, thread-suspend, thread-resume
 
 - Waterfall-Encrypt
   * Encryption algorithm that uses previous chunk of the message to encrypt the current chunk
+  * require, provide, define, map, lambda, char->integer, string->list, foldl, length, cons, list->string, string=?, list-tail, let, if, integer->char, car, cdr, list, reverse, equal?
 
 - Xibonacci
   * Abstraction on the Fibonacci sequence to allow arbitrary starting values and number of factors. Look up "Tribonacci" for an example
+  * define, let, if, reverse, cons, car, cadr, string-append, when, and, set!
 
 ## Broken
 - Integration
   * Calculates approximate area under a function, within given bounds on the x-y plane
+  * define, let, if, append, list, abs, floor, ceiling, car, cdr
 
 - Tau
   * Calculates pi or tau using a different heuristic
+  * define, let, if, map, lambda, car, cadr, caddr
