@@ -1,17 +1,21 @@
 #lang racket
 
-(define (factorial x)
-  (let loop ((i 0) (num x))
+; computes n ^ n
+(define (exponential-factorial x)
+  (let loop ((i 1) (total x))
     (if (= x i)
-        num
-        (loop (+ 1 i) (* num x)))))
+        total         ; true  -> return total
+        (loop         ; false -> continue recursion
+          (+ 1 i)           ; increment i
+          (* total x)))))   ; add exponential factor
+
+(exponential-factorial 5)
+
+; computes n * n -1 * n-2 * ...
+(define (factorial x)
+  (let loop ((i 1) (total x))
+    (if (= (- x 1) i)
+      total
+      (loop (+ 1 i) (* total (- x i))))))
 
 (factorial 5)
-
-(define (factorial-falling x)
-  (let loop ((i 1) (num x))
-    (if (= (- x 1) i)
-        num
-        (loop (+ 1 i) (* num (- x i))))))
-
-(factorial-falling 5)

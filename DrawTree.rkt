@@ -36,7 +36,7 @@
 ;Definitions
 (define y-change-min 10)
 (define y-change-max 20)
-(define depth 25)
+(define maximum-depth 25)
 
 ;Height Change
 (define height-slider
@@ -92,7 +92,7 @@
 
 ;Draw tree
 ;-----------------------------------------
-(define continue-decay 5)
+(define continue-decay 5)   ; the % increase in chance for a branch to die off
 
 (define root
   (make-object point% (/ frame-width 2) frame-height))
@@ -123,62 +123,85 @@
 
             (send dc set-pen black-pen))
 
-          ;Branches or stem?
-          (if (>= (/ (send branch-slider get-value) 100) (random))
+          ;are we making a branch or stem?
+          (if (>= (/ (send branch-slider get-value)
+                     100)
+                  (random))
 
             ;Branches
-            (let ((left-child (make-object
-                                point% 
-                                ;Random x change from slider
-                                (- (send parent get-x)
-                                   (+ branch-min
-                                      (random (send spread-slider get-value))))
+            (let ((left-child
+                    (make-object
+                      point% 
+                      ;Random x change from slider
+                      (- (send parent get-x)
+                         (+ branch-min
+                            (random (send spread-slider get-value))))
 
-                                ;Random y change from slider
-                                (- (send parent get-y)
-                                   (+ y-change-min
-                                      (random (send height-slider get-value))))))
+                      ;Random y change from slider
+                      (- (send parent get-y)
+                         (+ y-change-min
+                            (random (send height-slider get-value))))))
 
-                  (right-child (make-object 
-                                 point%
-                                 ;Random x change from slider
-                                 (+ (send parent get-x)
-                                    (+ branch-min 
-                                       (random (send spread-slider get-value))))
+                  (right-child
+                    (make-object 
+                      point%
+                      ;Random x change from slider
+                      (+ (send parent get-x)
+                         (+ branch-min 
+                            (random (send spread-slider get-value))))
 
-                                 ;Random y change from slider
-                                 (- (send parent get-y)
-                                    (+ y-change-min 
-                                       (random (send height-slider get-value)))))))
+                      ;Random y change from slider
+                      (- (send parent get-y)
+                         (+ y-change-min 
+                            (random (send height-slider get-value)))))))
 
               ;Draw lines between children and parent
               (send dc draw-lines (list parent left-child))
               (send dc draw-lines (list parent right-child))
 
-              ; Recurse
-              (make-tree left-child (+ depth 1) max-depth (- continue-chance (send decay-slider get-value)))
-              (make-tree right-child (+ depth 1) max-depth (- continue-chance (send decay-slider get-value))))
+              ; recurse left
+              (make-tree
+                left-child        ; root is now the left child
+                (+ depth 1)       ; depth has increased
+                max-depth
+                (- continue-chance (send decay-slider get-value)))  ; increase chance to die
+              
+              ; recurse right
+              (make-tree
+                right-child       ; root is now the right child
+                (+ depth 1)       ; depth has increased
+                max-depth 
+                (- continue-chance (send decay-slider get-value)))) ; increase chance to die
 
             ;Stem
-            (let ((stem (make-object
-                          point%
-                          ;No x change
-                          (send parent get-x)
+            (let ((stem 
+                    (make-object
+                      point%
+                      ;No x change
+                      (send parent get-x)
 
-                          ;Random y change from slider
-                          (- (send parent get-y)
-                             (+ y-change-min 
-                                (random (send height-slider get-value)))))))
+                      ;Random y change from slider
+                      (- (send parent get-y)
+                         (+ y-change-min 
+                            (random (send height-slider get-value)))))))
 
               ; Draw line between old stem segment and new one
               (send dc draw-lines (list parent stem))
 
               ; Recurse
-              (make-tree stem (+ depth 1) max-depth (- continue-chance (send decay-slider get-value))))
+              (make-tree 
+                stem            ; root is now this stem
+                (+ depth 1)     ; increase depth
+                max-depth       ; max-depth doesn't change across recursive calls
+                (- continue-chance (send decay-slider get-value)))) ; increase chance to die
             ))))
 
-    ;Begin the recursion
-    (make-tree root 0 depth 100)))
+    ;Begin the recursion, this is called first
+    (make-tree 
+      root                ; starting at the root
+      0                   ; 0 current depth
+      maximum-depth       ; the max-depth
+      100)))              ; 100% chance to continue
 
 ;Canvas
 (define canvas

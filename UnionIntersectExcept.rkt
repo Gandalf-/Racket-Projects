@@ -3,7 +3,9 @@
 (define a '(1 5 31 6 7 82 3 44 7 2 3 6 8 5 3))
 (define b '(34 23 2 6 7 67 54 5 7 8 56 4 54 5))
 
-; In first or second
+; in first OR second
+; --------------------
+; append the lists together, then remove duplicates
 (define (union a b)
   (let loop ((x (append a b))
              (out '()))
@@ -12,48 +14,52 @@
         (loop (remove* (list (car x)) x)
               (cons (car x) out)))))
 
-; In first and second
+; in first AND second
+; --------------------
+; sort, then use comparisons to determine membership quickly
 (define (intersect a b)
-  (let loop ((x (sort a <))
-             (y (sort b <))
-             (out '()))
+  (let loop ((first (sort a <))     ; sort smallest to largest
+             (second (sort b <))     ; sort smallest to largest
+             (out '()))         ; output variable we'll build as we go along
     (cond
-      ((or (empty? x)
-           (empty? y))
+      ((or (empty? first)           ; finished, return output
+           (empty? second))
        (reverse out))
 
-      ; In both lists
-      ((= (car x) (car y))
-       (loop (remove* (list (car x)) x)
-             (remove* (list (car y)) y)
-             (cons (car x) out)))
+      ; the element is in both lists, add it to output
+      ((= (car first) (car second))
+       (loop (remove* (list (car first)) first)
+             (remove* (list (car second)) second)
+             (cons (car first) out)))
 
-      ; Only in x
-      ((< (car x) (car y))
-       (loop (cdr x)
-             y
+      ; only in first
+      ((< (car first) (car second))
+       (loop (cdr first)
+             second
              out))
 
-      ; Only in y
-      ((> (car x) (car y))
-       (loop x
-             (cdr y)
+      ; only in second
+      ((> (car first) (car second))
+       (loop first
+             (cdr second)
              out))
       )))
 
-; In first but not second
+; in first BUT NOT second
+; --------------------
+; attempt to remove every element in second from first
 (define (except a b)
-  (let loop ((x a)
-             (y b)
+  (let loop ((first a)
+             (second b)
              (out '() ))
-    (if (or (empty? x)
-            (empty? y))
+    (if (or (empty? first)
+            (empty? second))
         (sort out <)
 
-        (loop (remove* (list (car x)) x)
-              y
-              (if (boolean? (member (car x) y))
-                  (cons (car x) out)
+        (loop (remove* (list (car first)) first)
+              second
+              (if (boolean? (member (car first) second))
+                  (cons (car first) out)
                   out))
         )))
 

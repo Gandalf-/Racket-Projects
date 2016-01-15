@@ -4,9 +4,10 @@
 (provide decimal->binary)
 (provide padding)
 
-(define padding 8)
+(define padding 8)  ; number of bits in a character
 
 ;BINARY->DECIMAL
+; string of 1's and 0's -> positive integer
 (define (binary->decimal input)
   (let convert ((list-chars (reverse
                               (string->list input)))

@@ -1,5 +1,6 @@
 #lang racket
 
+; computes the prime factors of x
 (define (prime-factors x)
   (let loop ((factors '(1) )
              (d 2)
