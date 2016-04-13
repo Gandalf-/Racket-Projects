@@ -6,6 +6,8 @@
 ; in first OR second
 ; --------------------
 ; append the lists together, then remove duplicates
+;
+; list of number, list of number -> list of number
 (define (union a b)
   (let loop ((x (append a b))
              (out '()))
@@ -17,12 +19,14 @@
 ; in first AND second
 ; --------------------
 ; sort, then use comparisons to determine membership quickly
+;
+; list of number, list of number -> list of number
 (define (intersect a b)
-  (let loop ((first (sort a <))     ; sort smallest to largest
-             (second (sort b <))     ; sort smallest to largest
-             (out '()))         ; output variable we'll build as we go along
+  (let loop ((first (sort a <))   ; sort smallest to largest
+             (second (sort b <))  ; sort smallest to largest
+             (out '()))           ; output variable we'll build as we go along
     (cond
-      ((or (empty? first)           ; finished, return output
+      ((or (empty? first)         ; finished, return output
            (empty? second))
        (reverse out))
 
@@ -48,6 +52,8 @@
 ; in first BUT NOT second
 ; --------------------
 ; attempt to remove every element in second from first
+;
+; list of number, list of number -> list of number
 (define (except a b)
   (let loop ((first a)
              (second b)
@@ -63,6 +69,9 @@
                   out))
         )))
 
-(union a b)
-(intersect a b)
-(except a b)
+(define (test)
+  (displayln (union a b))
+  (displayln (intersect a b))
+  (displayln (except a b)))
+
+(test)
