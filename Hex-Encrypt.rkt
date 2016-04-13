@@ -1,11 +1,10 @@
 #lang racket
 
-(define input "Hello there! Good luck decoding this!")
-(define output "48656c6c6f20746865726521")
-
-;Turns a string into a concatenated string of
-; each character's integer as hex representation
-; "Hello there!" -> "48656c6c6f20746865726521"
+; Turns a string into a concatenated string containing
+; each character's ascii number in hexidecimal
+;
+; string -> string
+; (string->hexstring "Hello there!") -> "48656c6c6f20746865726521"
 (define (string->hexstring x)
   (foldl string-append ""
          (reverse
@@ -15,10 +14,11 @@
               (char->integer n) 16))
            (string->list x)))))
 
-(string->hexstring input)
 
 ; Reverses what string->hexstring does
-; "48656c6c6f20746865726521" -> "Hello there!"
+;
+; string -> string
+; (hexstring->string "48656c6c6f20746865726521") -> "Hello there!"
 (define (hexstring->string x)
   (define (clump w n)
     (let l ((in w)
@@ -35,89 +35,147 @@
        (string->number n 16)))
     (clump (string->list x) 2))))
 
-(hexstring->string (string->hexstring input))
 
 ;Is the character a number?
+;
+; char -> boolean
+; (num? '4') -> #true
 (define (num? y)
   (let ((i (char->integer y)))
     (and (< i 58)(> i 47))))
 
+
+;Is the character a number?
+;
+; char -> boolean
+; (char? 'k') -> #true
 (define (char? y)
   (let ((i (char->integer y)))
     (or (> i 58)(< i 47))))
 
+
 ; Takes a string, and breaks into string chunks of
-; contiguous members that meet proc, which is a bool
-; num? : "656c6c203a29" -> "656" "6" "203" "29"
-(define (break-with x proc)
-  (let l ((lis (string->list x))
-          (cur '() )
-          (out '() ))
-    (if (empty? lis)
-        (if (empty? cur)
-            (map (lambda (n) (list->string n))
-                 (reverse out))
-            
-            (map (lambda (n) (list->string n))
-                 (reverse (cons (reverse cur) out))))
-        
-        (if (proc (car lis))
-            (l (cdr lis)
-               (cons (car lis) cur)
-               out)
-            
-            (l (cdr lis)
-               '()
-               (if (empty? cur)
-                   out
-                   (cons (reverse cur) out)))))
+; contiguous members that meet proc, which is a procedure that
+; returns a boolean
+;
+; string, procedure (char -> boolean) -> list of strings
+; (break-with num? "656c6c203a29") -> '("656" "6" "203" "29")
+(define (break-with input proc)
+  (let loop ((input-list (string->list input))
+             (current-group '() )
+             (output '() ))
+
+    (if (empty? input-list)
+      ; done, check if we need to add the current group to output
+      (if (empty? current-group)
+        (map (lambda (e) (list->string e))
+             (reverse output))
+
+        (map (lambda (e) (list->string e))
+             (reverse 
+               (cons (reverse current-group)
+                     output))))
+
+      ; not done, either keep building the current group or add it and start over
+      (if (proc (car input-list))
+        (loop (cdr input-list)
+              (cons (car input-list) 
+                    current-group)
+              output)
+
+        (loop (cdr input-list)
+              '()
+              (if (empty? current-group)
+                output
+                (cons (reverse current-group) output)))))
     ))
 
-; Integer string to hex string
+
+; convert decimal string to a hexidecimal string
+;
+; string -> string
+; (numstring->hexstring "2349823") -> "23daff"
 (define (numstring->hexstring x)
   (number->string
-   (string->number x 10) 16))
+    (string->number x 10) 16))
 
-; Breaks x into two pieces, those that meet rule1 and those that meet rule2. Then 
-; applies proc1 to the first group, proc2 to the second group. Then weaves 
-; the groups back together
-(define (coalesce x rule1 rule2 proc1 proc2)
-  (letrec ((a (break-with x rule1))     ; create list a by breaking x with rule1
-           (b (break-with x rule2))     ; create list b by breaking x with rule2
-           (f (rule1 (string-ref x 0))) ; determine whether A or B should be first in output
-           
-           (A (map (lambda (n) (proc1 n)) a)) ; apply proc1 to list a
-           (B (map (lambda (n) (proc2 n)) b)) ; apply proc2 to list b
-           
-           (Alen (length A))
-           (Blen (length B))
-           (in (if f
-                   (if (> Alen Blen)
-                       (cons A (flatten (cons B "")))
-                       (cons A B))
-                   (if (> Blen Alen)
-                       (cons B (flatten (cons A "")))
-                       (cons B A)))))
-    (let ((out
-           (flatten
-            (map
-              (lambda (i j)
-                (cond
-                  ((= 0 (string-length i)) j)
-                  ((= 0 (string-length j)) i)
-                  (else 
-                    (cons i j))))
-              (car in)(cdr in)
-              ))))
-      (foldl string-append "" (reverse out))
-      )))
 
+; Breaks input into two pieces, pieces that meet ruleA and those that meet ruleB.
+; Then applies procA to the first group, procB to the second group. 
+; Then weaves the groups back together
+;
+; string, procedure (char -> boolean), procedure (string -> string),
+; procedure (char -> boolean), procedure (string -> string) -> string
+;
+; #see (shrinkhex) for example usage
+(define (coalesce input ruleA procA ruleB procB)
+  (letrec
+    ; create groups according to rules
+    ((groupA (break-with input ruleA)) 
+     (groupB (break-with input ruleB))
+
+     ; determine which group starts weave first
+     (Afirst? (ruleA (string-ref input 0)))
+
+     ; apply correct procedure to matching group
+     (A (map
+          (lambda (e) (procA e))
+          groupA))
+     (B (map
+          (lambda (e) (procB e))
+          groupB))
+
+     ; get lengths once because we need them a couple times
+     (lenA (length A))
+     (lenB (length B))
+
+     ; prepare for output, make sure we have consistent lengths for (map)
+     (in (if Afirst?
+           (if (> lenA lenB)
+             (cons A (flatten (cons B "")))
+             (cons A B))
+           (if (> lenB lenA)
+             (cons B (flatten (cons A "")))
+             (cons B A))))
+
+     ; build the output
+     (out
+       (flatten
+         (map
+           (lambda (i j)
+             (cond
+               ((= 0 (string-length i)) j)
+               ((= 0 (string-length j)) i)
+               (else 
+                 (cons i j))))
+           (car in)(cdr in)
+           ))))
+
+    ; append all the strings together
+    (foldl string-append "" (reverse out))
+    ))
+
+; example usage for coalesce
+;
+; given a string, go through and group contiguous groups of letters and numbers
+; for each group of letters, uppercase them
+; for each group of numbers, convert them to hexidecimal
+; weave the groups back together
+;
+; string -> string
 (define (shrinkhex x)
   (coalesce x
             char?
-            num?
             string-upcase
+            num?
             numstring->hexstring))
 
-(shrinkhex (string->hexstring "Hello there Wordpress"))
+(define (test)
+  (let ((input "Hello there! Good luck decoding this!"))
+    (displayln (string->hexstring input))
+    (displayln (hexstring->string (string->hexstring input)))
+    (displayln (numstring->hexstring "2349823"))
+    (displayln (string->hexstring "Hello there Wordpress"))
+    (displayln (shrinkhex (string->hexstring "Hello there Wordpress")))))
 
+(test)
