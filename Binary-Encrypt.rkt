@@ -4,10 +4,11 @@
 (provide string->binary)
 (provide binary->string)
 
-;(define input "Hello there. What's going on? Congratulations on decoding this!")
-
 ; Takes a string and returns the binary represenatation of each character,
 ; in sequence. This is returned as a string
+;
+; string -> string
+; (string->binary "Hello") -> "0110111101101100011011000110010101001000"
 (define (string->binary input)
   (foldl string-append ""
          (map 
@@ -15,8 +16,11 @@
              (decimal->binary (char->integer x)))
            (string->list input))))
 
-;(string->binary input)
 
+; Given the binary representation of a string, convert back to the orginal string
+;
+; string -> string
+; (binary->string "0110111101101100011011000110010101001000") -> "Hello"
 (define (binary->string input)
   (let loop ((in (string->list input))
              (out '() ))
@@ -32,4 +36,11 @@
                       )))
       )))
 
-;(binary->string (string->binary input))
+
+(define (test)
+  (letrec ((str1 "Hello there. What's going on? Congratulations on decoding this!")
+           (str2 "Hello")
+           (input str2))
+    (displayln (string->binary input))
+    (displayln (binary->string (string->binary input)))))
+;(test)

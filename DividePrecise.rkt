@@ -32,4 +32,4 @@
               (+ i 1)
               (* (remain x y) 10)))))
 
-(divide-precise 4938492348925 8 250)
+(divide-precise 10 12345 550)

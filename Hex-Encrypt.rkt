@@ -55,12 +55,10 @@
           (out '() ))
     (if (empty? lis)
         (if (empty? cur)
-            (map (lambda (n)
-                   (list->string n))
+            (map (lambda (n) (list->string n))
                  (reverse out))
             
-            (map (lambda (n)
-                   (list->string n))
+            (map (lambda (n) (list->string n))
                  (reverse (cons (reverse cur) out))))
         
         (if (proc (car lis))
@@ -75,46 +73,42 @@
                    (cons (reverse cur) out)))))
     ))
 
-;Integer string to hex string
+; Integer string to hex string
 (define (numstring->hexstring x)
   (number->string
    (string->number x 10) 16))
 
-;Breaks x into two pieces, those that meet rule1
-; and those that meet rule2. Then applies proc1 to
-; the first group, proc2 to the second group. Then
-; weaves the groups back together
+; Breaks x into two pieces, those that meet rule1 and those that meet rule2. Then 
+; applies proc1 to the first group, proc2 to the second group. Then weaves 
+; the groups back together
 (define (coalesce x rule1 rule2 proc1 proc2)
-  (letrec ((a (break-with x rule1))
-           (b (break-with x rule2))
-           (f (rule1 (string-ref x 0)))
+  (letrec ((a (break-with x rule1))     ; create list a by breaking x with rule1
+           (b (break-with x rule2))     ; create list b by breaking x with rule2
+           (f (rule1 (string-ref x 0))) ; determine whether A or B should be first in output
            
-           (A (map (lambda (n)
-                     (proc1 n))
-                   a))
-           (B (map (lambda (n)
-                     (proc2 n))
-                   b))
+           (A (map (lambda (n) (proc1 n)) a)) ; apply proc1 to list a
+           (B (map (lambda (n) (proc2 n)) b)) ; apply proc2 to list b
            
-           (Al (length A))
-           (Bl (length B))
+           (Alen (length A))
+           (Blen (length B))
            (in (if f
-                   (if (> Al Bl)
+                   (if (> Alen Blen)
                        (cons A (flatten (cons B "")))
                        (cons A B))
-                   (if (> Bl Al)
+                   (if (> Blen Alen)
                        (cons B (flatten (cons A "")))
                        (cons B A)))))
     (let ((out
            (flatten
-            (map (lambda (i j)
-                   (cond
-                     ((= 0 (string-length i)) j)
-                     ((= 0 (string-length j)) i)
-                     (else 
-                      (cons i j))))
-                 (car in)(cdr in)
-                 ))))
+            (map
+              (lambda (i j)
+                (cond
+                  ((= 0 (string-length i)) j)
+                  ((= 0 (string-length j)) i)
+                  (else 
+                    (cons i j))))
+              (car in)(cdr in)
+              ))))
       (foldl string-append "" (reverse out))
       )))
 

@@ -23,19 +23,20 @@
   
 ;Split the input list of characters into strings of len length
 (define (split-list input len)
-  (let loop ((out '() )
-             (curr input))
-    (if (> len (length curr))
-      ;Remove potential empty string in results
-      (let ((res (reverse (cons (list->string curr)
-                                out))))
-        (if (string=? (last res) "")
-          (take res (- (length res) 1))
-          res))
+  (let loop
+    ((out '() )
+     (current input))
+    (if (> len (length current))
+
+      ;finished, remove potential empty string in results
+      (let ((result (reverse (cons (list->string current) out))))
+        (if (string=? (last result) "")
+          (take result (- (length result) 1))
+          result))
+
       ;Add len elements to output
-      (loop (cons (list->string (take curr len))
-                  out)
-            (list-tail curr len)) )))
+      (loop (cons (list->string (take current len)) out)
+            (list-tail current len)) )))
 
 ;ENCRYPTION FUNCS
 ;====================================

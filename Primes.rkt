@@ -11,9 +11,7 @@
       (reverse out)
       (loop (filter 
               (lambda (x)
-                (not
-                  (= 0
-                     (modulo x (car in)))))
+                (not (= 0 (modulo x (car in)))))
               (cdr in))
             (cons (car in)
                   out))) ))
