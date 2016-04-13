@@ -39,7 +39,8 @@
        (max-value 40)
        (init-value 10)
 
-       ;Callback means that this function is called whenever segment-slider's value changes
+       ;Callback means that this function is called whenever 
+       ;segment-slider's value changes
        (callback 
         (lambda (button event) 
           (set! num-segments (send segment-slider get-value))

@@ -3,6 +3,10 @@
 This is a collection of my side projects in Racket. I'll continue to add more, and polish the existing ones. Maybe this'll have some good examples for someone learning to code in a functional language.
 
 ## Polished
+- **Binary-Decimal**
+  * Conversions between decimal and binary representations of positive integers
+  * *provide, define, let, if, cons, ceiling, char->integer, reverse, string->list, not, empty?, flatten, append, lambda, map, list->string, cdr, make-string*
+
 - **Binary-Encrypt**
   * Various conversions between strings, decimal integers, and binary integers
   * *require, provide, foldl, map, lambda, char->integer, string->list, let, if, reverse, list-tail, append, list, integer->char, list->string*
@@ -10,6 +14,10 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - **DividePrecise**
   * Divide real numbers with arbitrary precision
   * *provide, define, foldl, string-append, cdr, member, reverse, string->list, number->string, map, exact->inexact, let, if, string->number, cons*
+
+- **Factorials**
+  * Basic calculation of factorials
+  * *define, let, if, cond*
 
 - **Hex-Encrypt**
   * Various conversions between strings, decimal integers, hexidecimal integers
@@ -31,10 +39,6 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - **Basics**
   * A short walkthrough on the basics of Racket.
   * *define, displayln, lambda, for-each, map, let*
-  
-- **Binary-Decimal**
-  * Conversions between decimal and binary representations of positive integers
-  * *provide, define, let, if, cons, ceiling, char->integer, reverse, string->list, not, empty?, flatten, append, lambda, map, list->string, cdr, make-string*
 
 - **Draw Tree (GUI)**
   * Draws a graphical tree of arbitrary depth, width, span, and color
@@ -43,10 +47,6 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 - **FactorPrime**
   * Finds the prime factors of integers
   * *define, let, when, if, flatten, cons, modulo*
-
-- **Factorials**
-  * Basic calculation of factorials
-  * *define, let, if, cond*
 
 - **FibonacciApprox**
   * Calculates the n'th Fibonacci number with various approximations

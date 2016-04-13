@@ -1,6 +1,8 @@
 #lang racket
 
 ; computes the prime factors of x
+;
+; number -> number
 (define (prime-factors x)
   (let loop ((factors '(1) )
              (d 2)
@@ -11,7 +13,7 @@
           (flatten (cons factors n))
           factors))
     
-    (if (= n 1)
+    (if (<= n 1)
         (flatten (cons factors x))
         (if (= 0 (modulo n d))
             (loop (flatten (cons factors d))
@@ -23,12 +25,8 @@
             ))
     ))
 
-(prime-factors 1481131213)
-(prime-factors 717413676)
-(prime-factors 69724573273930333651)
-(prime-factors 2061538749789532761)
-(prime-factors 4204684594679497881)
-(prime-factors 245737669504892523)
-(prime-factors 10123872924213782016)
-(prime-factors 457921847376287195)
-(prime-factors 9239763944475816737)
+(define (test)
+  (displayln (prime-factors 1481131213))
+  (displayln (prime-factors 71741)))
+
+(test)
