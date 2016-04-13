@@ -46,7 +46,7 @@ This is a collection of my side projects in Racket. I'll continue to add more, a
 
 - **Factorials**
   * Basic calculation of factorials
-  * *define, let, if*
+  * *define, let, if, cond*
 
 - **FibonacciApprox**
   * Calculates the n'th Fibonacci number with various approximations
