@@ -12,6 +12,10 @@
 ; string -> number
 ; (binary->decimal "00000010") -> 2
 (define (binary->decimal input)
+
+  (unless (string? input)
+    (error "binary->decimal: invalid arguments"))
+
   (let convert ((list-chars (reverse
                               (string->list input)))
                 (list-nums '() ))
@@ -111,6 +115,10 @@
 ; number -> string
 ; (decimal->binary 2) -> "00000010"
 (define (decimal->binary input)
+
+  (unless (number? input)
+    (error "decimal->binary: invalid arguments"))
+
   (if (= 0 input)
     (make-string padding #\0)
     (make-output (find-places input))))

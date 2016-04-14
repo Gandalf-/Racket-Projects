@@ -10,6 +10,10 @@
 ; string -> string
 ; (string->binary "Hello") -> "0110111101101100011011000110010101001000"
 (define (string->binary input)
+
+  (unless (string? input)
+    (error "string->binary: invalid arguments"))
+
   (foldl string-append ""
          (map 
            (lambda (x) 
@@ -22,6 +26,10 @@
 ; string -> string
 ; (binary->string "0110111101101100011011000110010101001000") -> "Hello"
 (define (binary->string input)
+
+  (unless (string? input)
+    (error "binary->string: invalid arguments"))
+
   (let loop ((in (string->list input))
              (out '() ))
     (if (empty? in)
@@ -43,4 +51,5 @@
            (input str2))
     (displayln (string->binary input))
     (displayln (binary->string (string->binary input)))))
+
 ;(test)

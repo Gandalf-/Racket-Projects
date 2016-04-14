@@ -6,6 +6,10 @@
 ; string -> string
 ; (string->hexstring "Hello there!") -> "48656c6c6f20746865726521"
 (define (string->hexstring x)
+
+  (unless (string? x)
+    (error "string->hexstring: invalid arguments"))
+
   (foldl string-append ""
          (reverse
           (map
@@ -28,6 +32,10 @@
           (l (cddr in)
              (cons (list->string (take in n))
                    out)))))
+
+  (unless (string? x)
+    (error "hexstring->string: invalid arguments"))
+
   (list->string
    (map
     (lambda (n)
@@ -61,6 +69,10 @@
 ; string, procedure (char -> boolean) -> list of strings
 ; (break-with num? "656c6c203a29") -> '("656" "6" "203" "29")
 (define (break-with input proc)
+
+  (unless (and (string? input) (procedure? proc))
+    (error "break-with: invalid arguments"))
+
   (let loop ((input-list (string->list input))
              (current-group '() )
              (output '() ))
@@ -109,6 +121,11 @@
 ;
 ; #see (shrinkhex) for example usage
 (define (coalesce input ruleA procA ruleB procB)
+
+  (unless (and (string? input) (procedure? ruleA) (procedure? procA)
+               (procedure? ruleB) (procedure? procB))
+    (error "coalesce: invalid arguments"))
+
   (letrec
     ; create groups according to rules
     ((groupA (break-with input ruleA)) 

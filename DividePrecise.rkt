@@ -29,7 +29,8 @@
     (number->string
       (abs (string->number x))))
 
-  (unless (and (number? x) (number? y) (number? precision))
+  (unless (and (number? x) (number? y)
+               (exact-nonnegative-integer? precision))
     (error "divide-precise: invalid arguments"))
 
   (let loop ((out '() ) (i 0) (x x))
@@ -46,6 +47,6 @@
   (displayln (divide-precise 10 12345 550))
   (displayln (divide-precise 22.2349 -7.123 1000))
   (displayln (divide-precise -20 -4 100))
-  (displayln (divide-precise -20 '(1) 100)))
+  (displayln (divide-precise -20 1 -100)))
 
 (test)
