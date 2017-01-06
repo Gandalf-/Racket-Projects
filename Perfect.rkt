@@ -2,10 +2,7 @@
 
 ;Returns the sum of all the values in a list
 (define (sum-list x)
-  (if (null? x)
-    0
-    (+ (car x)
-       (sum-list (cdr x)))))
+  (foldr + 0 x))
 
 ;Checker functions
 (define (divisor? x i)

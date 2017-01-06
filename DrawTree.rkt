@@ -163,15 +163,15 @@
               (make-tree
                 left-child        ; root is now the left child
                 (+ depth 1)       ; depth has increased
-                max-depth
-                (- continue-chance (send decay-slider get-value)))  ; increase chance to die
+                max-depth         ; increase chance to die
+                (- continue-chance (send decay-slider get-value)))
               
               ; recurse right
               (make-tree
                 right-child       ; root is now the right child
                 (+ depth 1)       ; depth has increased
-                max-depth 
-                (- continue-chance (send decay-slider get-value)))) ; increase chance to die
+                max-depth         ; increase chance to die
+                (- continue-chance (send decay-slider get-value))))
 
             ;Stem
             (let ((stem 
